@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environment
+myenv/
+
+# Flask / general
+instance/
+*.db
+*.sqlite3
+*.sqlite
+*.pyc
+*.pyo
+
+# Flask-Migrate / Alembic
+migrations/
+*.bak
+
+# Environment variables
+.env
+.env.*
+.flaskenv
+
+
+# Pytest / test caches
+.pytest_cache/
+.coverage
+.tox/

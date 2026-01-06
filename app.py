@@ -13,3 +13,4 @@ if __name__ == "__main__":
         debug=os.getenv("FLASK_DEBUG", "1") == "1",
         reloader_type=os.getenv("FLASK_RELOADER_TYPE", "watchdog")
     )
+    

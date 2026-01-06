@@ -26,7 +26,7 @@ migrations/
 # Environment variables
 .env
 .env.*
-.flaskenv
+# .flaskenv
 
 
 # Pytest / test caches

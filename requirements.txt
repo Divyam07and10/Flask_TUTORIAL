@@ -6,3 +6,8 @@ Flask-Bcrypt
 python-dotenv
 watchdog
 email-validator
+pydantic
+pytest
+pytest-flask
+gunicorn
+psycopg2-binary

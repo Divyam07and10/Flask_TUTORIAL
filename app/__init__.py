@@ -1,13 +1,15 @@
 import os
 from flask import Flask
 from app.core.config import Config
-from app.extension import db, migrate, jwt, bcrypt
+from app.extension import db, migrate, jwt, bcrypt, cors
 from app.api.auth import auth_bp
 from app.api.users import users_bp
 
 def createApp(testing=False) -> Flask:
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    cors.init_app(app, origins=app.config.get('CORS_ORIGINS'), supports_credentials=True)
 
     if testing:
         app.config["TESTING"] = True

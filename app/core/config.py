@@ -19,6 +19,8 @@ class Config:
     JWT_REFRESH_COOKIE_PATH = os.getenv('JWT_REFRESH_COOKIE_PATH', '/api/auth/refresh')
     JWT_COOKIE_SAMESITE = os.getenv('JWT_COOKIE_SAMESITE', 'Lax')
     
+    CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'http://localhost:3000').split(',')
+    
     JWT_ACCESS_TOKEN_EXPIRES = parse_time(os.getenv('ACCESS_TOKEN_EXPIRE_TIME', '30m'))
     JWT_REFRESH_TOKEN_EXPIRES = parse_time(os.getenv('REFRESH_TOKEN_EXPIRE_TIME', '1d'))
 

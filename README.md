@@ -59,17 +59,26 @@ Run the complete unit test suite:
 python3 -m pytest -vv
 ```
 
-## 📡 API Documentation
-Use the included `postman_collection.json` to interact with the API endpoints:
-- **Auth**: `/api/auth/register`, `/api/auth/login`
-- **Users**: `/api/users/` (Full CRUD)
+## 🧪 API Interaction
 
-## 📂 Project Structure
-- `app/api/`: Modular Blueprints for Auth and User management.
-- `app/core/`: Configuration and Security logic.
-- `app/models/`: SQLAlchemy database models.
-- `app/repositories/`: Pure functional database operations.
+This project uses secure **HttpOnly cookies** for authentication.
+
+1.  **Login**: Call `POST /api/auth/login`. The server will set `access_token_cookie` and `refresh_token_cookie`.
+2.  **Authenticated Requests**: In Postman or your browser, these cookies are sent automatically. No manual `Authorization` header is required.
+3.  **Refresh**: Call `POST /api/auth/refresh` when the access token expires.
+4.  **Logout**: Call `POST /api/auth/logout` to clear all security cookies.
+
+### Postman Setup
+- Import `postman_collection.json`.
+- Set the `user_id` variable after your first login.
+- Cookies will be managed automatically in the Postman "Cookies" tab.
 - `app/services/`: Functional business logic.
 - `app/schemas/`: Pydantic models for request/response validation.
 - `app/utils/`: Security and configuration utilities.
+
+## 🏁 Operational Status
+- **Auth**: Cookie-based JWT (Secure/HttpOnly)
+- **Database**: PostgreSQL / SQLAlchemy
+- **Migration**: Flask-Migrate
+- **Testing**: 100% Pass Rate (pytest)
 - `tests/`: Isolated unit tests using in-memory database.

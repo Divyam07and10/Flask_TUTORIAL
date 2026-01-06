@@ -2,7 +2,7 @@
     "info": {
         "_postman_id": "c1f7b8a1-8d2c-4b5a-9e3d-7f6d5c4b3a21",
         "name": "Flask User CRUD API",
-        "description": "Professional Postman collection with formal naming and strict validation examples.",
+        "description": "Professional Postman collection using secure HttpOnly cookies and dual CSRF protection (Access/Refresh).",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
@@ -39,6 +39,23 @@
                 },
                 {
                     "name": "User Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const responseData = pm.response.json();",
+                                    "if (responseData.access_csrf) {",
+                                    "    pm.collectionVariables.set(\"access_csrf\", responseData.access_csrf);",
+                                    "}",
+                                    "if (responseData.refresh_csrf) {",
+                                    "    pm.collectionVariables.set(\"refresh_csrf\", responseData.refresh_csrf);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
                         "method": "POST",
                         "header": [
@@ -67,19 +84,29 @@
                 },
                 {
                     "name": "Refresh Access Token",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const responseData = pm.response.json();",
+                                    "if (responseData.access_csrf) {",
+                                    "    pm.collectionVariables.set(\"access_csrf\", responseData.access_csrf);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
                     "request": {
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{refresh_token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "method": "POST",
-                        "header": [],
+                        "header": [
+                            {
+                                "key": "X-CSRF-TOKEN",
+                                "value": "{{refresh_csrf}}",
+                                "type": "text"
+                            }
+                        ],
                         "url": {
                             "raw": "{{base_url}}/api/auth/refresh",
                             "host": [
@@ -93,6 +120,31 @@
                         }
                     },
                     "response": []
+                },
+                {
+                    "name": "User Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "X-CSRF-TOKEN",
+                                "value": "{{access_csrf}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/logout",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "auth",
+                                "logout"
+                            ]
+                        }
+                    },
+                    "response": []
                 }
             ]
         },
@@ -102,16 +154,6 @@
                 {
                     "name": "List All Users",
                     "request": {
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{access_token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "method": "GET",
                         "header": [],
                         "url": {
@@ -131,16 +173,6 @@
                 {
                     "name": "Get User Profile",
                     "request": {
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{access_token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "method": "GET",
                         "header": [],
                         "url": {
@@ -160,21 +192,16 @@
                 {
                     "name": "Update User Credentials",
                     "request": {
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{access_token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "method": "PUT",
                         "header": [
                             {
                                 "key": "Content-Type",
                                 "value": "application/json"
+                            },
+                            {
+                                "key": "X-CSRF-TOKEN",
+                                "value": "{{access_csrf}}",
+                                "type": "text"
                             }
                         ],
                         "body": {
@@ -198,18 +225,14 @@
                 {
                     "name": "Delete User Account",
                     "request": {
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{access_token}}",
-                                    "type": "string"
-                                }
-                            ]
-                        },
                         "method": "DELETE",
-                        "header": [],
+                        "header": [
+                            {
+                                "key": "X-CSRF-TOKEN",
+                                "value": "{{access_csrf}}",
+                                "type": "text"
+                            }
+                        ],
                         "url": {
                             "raw": "{{base_url}}/api/users/{{user_id}}",
                             "host": [
@@ -234,17 +257,17 @@
             "type": "string"
         },
         {
-            "key": "access_token",
-            "value": "",
-            "type": "string"
-        },
-        {
-            "key": "refresh_token",
-            "value": "",
-            "type": "string"
-        },
-        {
             "key": "user_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "access_csrf",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "refresh_csrf",
             "value": "",
             "type": "string"
         }
